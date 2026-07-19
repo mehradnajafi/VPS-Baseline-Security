@@ -24,10 +24,44 @@ This script automates the fix. It locks down the UFW (Uncomplicated Firewall) so
 
 ## 🚀 Usage
 
-Run this on a fresh Ubuntu/Debian machine as root or with sudo:
+Clone the repository:
 
 ```bash
-git clone [https://github.com/mehradnajafi/vps-baseline-security.git](https://github.com/mehradnajafi/vps-baseline-security.git)
-cd vps-baseline-security
+git clone https://github.com/mehradnajafi/VPS-Baseline-Security.git
+cd VPS-Baseline-Security
+```
+
+Review the script before running it:
+
+```bash
+less setup.sh
+```
+
+Make the script executable and run it with sudo:
+
+```bash
 chmod +x setup.sh
 sudo ./setup.sh
+```
+
+## Scope and Limitations
+
+This project currently focuses on Cloudflare origin firewall rules.
+
+It does not:
+
+- Provide complete VPS hardening
+- Hide an origin IP address that has already been exposed
+- Fully harden SSH
+- Configure Fail2ban or operating-system patching
+- Configure monitoring, backups, or application security
+- Replace a complete server-security review
+
+## Planned Improvements
+
+- Detect and confirm custom SSH ports
+- Validate downloaded IP ranges before applying firewall changes
+- Add a dry-run mode
+- Add configuration backup and rollback support
+- Prevent duplicate rules during repeated runs
+- Document validation and failure scenarios
