@@ -9,8 +9,17 @@ set -euo pipefail
 echo "[*] Starting Cloudflare origin firewall configuration..."
 
 # 1. Update package list
-echo "[*] Updating system packages..."
-apt-get update -qq
+if [[ $EUID -ne 0 ]]; then
+    echo "[!] Run this script as root or with sudo."
+    exit 1
+fi
+
+for command in ufw curl mktemp; do
+    if ! command -v "$command" >/dev/null 2>&1; then
+        echo "[!] Required command not found: $command"
+        exit 1
+    fi
+done
 
 # 2. Setup baseline UFW (Firewall) rules
 echo "[*] Setting up UFW basics..."
@@ -44,11 +53,10 @@ while IFS= read -r ip; do
     ufw allow proto tcp from "$ip" to any port 443
 done < "$CF_IPS"
 
-# Clean up temp file
-rm /tmp/cf_ips
 
 # 4. Enable firewall
 echo "[*] Enabling UFW..."
 ufw --force enable
 
-echo "[+] Cloudflare origin firewall rules applied. HTTP/HTTPS access is limited to Cloudflare IP ranges."
+echo "[+] Cloudflare IP-based HTTP/HTTPS rules were added."
+echo "[*] Review all active rules with: ufw status numbered"
