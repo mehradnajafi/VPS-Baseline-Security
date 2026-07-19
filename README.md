@@ -1,16 +1,23 @@
-# VPS Baseline Security & Cloudflare Routing
+# Cloudflare Origin Firewall Baseline for Linux VPS
 
-A straightforward Bash script I wrote to harden fresh Linux (Ubuntu/Debian) servers. 
+A focused Bash and UFW baseline for restricting direct HTTP and HTTPS access to Cloudflare-proxied Linux servers.
 
-## 🧠 Why I built this
-While studying routing and messing with Cloudflare for my personal projects, I realized a major security flaw: if you proxy a website through Cloudflare, attackers can still scan the internet, find your server's true IP, and hit it directly (bypassing the Cloudflare WAF entirely). 
+The current scope is limited to Cloudflare origin firewall rules. It is not a complete VPS-hardening solution. 
+
+## Why I Built This
+
+When a DNS record is proxied through Cloudflare, normal clients connect to Cloudflare instead of connecting directly to the origin server.
+
+However, if the origin IP address is already known or exposed through historical DNS records, another service, or an older configuration, ports 80 and 443 may still accept direct connections.
+
+This project focuses on one network-layer control: allowing HTTP and HTTPS traffic from Cloudflare's published IP ranges while blocking other direct web traffic at the origin firewall.
 
 This script automates the fix. It locks down the UFW (Uncomplicated Firewall) so that ports 80 and 443 only accept incoming traffic from Cloudflare's official IP ranges.
 
 ## ⚙️ What the script does:
 1. Sets default UFW rules (deny all incoming, allow all outgoing).
 2. Keeps SSH access open (so we don't lock ourselves out).
-3. Automatically fetches the latest IPv4 and IPv6 lists directly from Cloudflare's API.
+3. Downloads Cloudflare's published IPv4 and IPv6 ranges.
 4. Whitelists those specific IPs for web traffic.
 5. Enables the firewall.
 
