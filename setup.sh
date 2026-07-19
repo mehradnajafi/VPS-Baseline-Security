@@ -1,8 +1,11 @@
 #!/bin/bash
-# Basic VPS Hardening & Cloudflare UFW Rules
+
+# Cloudflare Origin Firewall Baseline for Linux VPS
 # Author: Mehrad Najafi
-# Description: Secures a fresh Linux server by dropping all incoming HTTP/HTTPS 
-# traffic except from official Cloudflare IP ranges.
+# Description: Restricts inbound HTTP/HTTPS traffic to Cloudflare's published
+# IP ranges using UFW.
+
+echo "[*] Starting Cloudflare origin firewall configuration..."
 
 echo "[*] Starting the hardening process..."
 
